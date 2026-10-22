@@ -5,15 +5,16 @@ public class Livro {
     private String titulo;
     private String isbn;
     private double preco;
-    private int quantidadeEstoque;
+    private int estoque;
     private Autor autor;
 
 
-    public Livro(String titulo, String isbn, double preco, int quantidadeEstoque, Autor autor) {
+    public Livro(String titulo, String isbn, double preco,
+                 int estoque, Autor autor) {
         this.titulo = titulo;
         this.isbn = isbn;
         this.preco = preco;
-        this.quantidadeEstoque = quantidadeEstoque;
+        this.estoque = estoque;
         this.autor = autor;
     }
 
@@ -21,26 +22,47 @@ public class Livro {
         return titulo;
     }
 
+    public String getIsbn() {
+        return isbn;
+    }
+
     public double getPreco() {
         return preco;
     }
 
-    public int getQuantidadeEstoque() {
-        return quantidadeEstoque;
+    public int getEstoque() {
+        return estoque;
     }
 
-    public void adicionarEstoque(int quantidade) {
-        if (quantidade > 0) {
-            quantidadeEstoque += quantidade;
-        }
+    public Autor getAutor() {
+        return autor;
     }
 
-    public boolean vender() {
-        if (quantidadeEstoque > 0) {
-            quantidadeEstoque--;
-            return true;
+    public double calcularPrecoComDesconto(double percentual) {
+        if (percentual < 0 || percentual > 100) {
+            throw new IllegalArgumentException(
+                    "Desconto deve estar entre 0 e 100%.");
         }
-        return false;
+
+        return preco * (1 - percentual / 100);
+    }
+
+    public void retirarEstoque(int quantidade) {
+        if (quantidade <= 0 || quantidade > estoque) {
+            throw new IllegalArgumentException(
+                    "Quantidade inválida para o estoque.");
+        }
+
+        estoque -= quantidade;
+    }
+
+    @Override
+    public String toString() {
+        return "Título: " + titulo
+                + " | ISBN: " + isbn
+                + " | Autor: " + autor.getNome()
+                + " | Preço: R$ " + String.format("%.2f", preco)
+
+                + " | Estoque: " + estoque;
     }
 }
-
